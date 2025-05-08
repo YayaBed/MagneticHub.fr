@@ -1,5 +1,5 @@
 title: MagneticHub.fr
-description: Bons plans puissants pour booster ta vie!
-baseurl: ""  # Ne pas mettre de valeur ici, pour GitHub Pages
-url: "https://yayabed.github.io"  # Ton URL GitHub Pages
-permalink: /articles/:title/  # Pour que chaque article ait une URL propre
+description: Le blog dédié aux microservices et aux revenus passifs en ligne.
+baseurl: ""  # Doit être vide pour les pages GitHub
+url: "https://yayabed.github.io"  # L'URL de ton site
+permalink: /articles/:title/  # Permet de lier les articles sans extension .md
