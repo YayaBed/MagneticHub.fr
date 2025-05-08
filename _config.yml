@@ -1,35 +1,31 @@
 # Configuration de base
 title: "MagneticHub.fr"
 description: "Le blog dédié aux microservices et aux revenus passifs en ligne."
-url: "https://yayabed.github.io"  # L'URL de ton site
-baseurl: ""  # Laisser vide pour un site GitHub Pages
+url: "https://yayabed.github.io"
+baseurl: "/MagneticHub"  # Remplacez par le nom de votre dépôt GitHub si nécessaire
 
 # Permaliens
-permalink: /articles/:title/  # Permet des URLs propres sans extension .md
+permalink: /:categories/:year/:month/:day/:title/
 
 # Structure du site
-theme: jekyll-theme-cayman  # Tu peux changer de thème ici, ou en choisir un autre
+remote_theme: pages-themes/cayman@v0.2.0  # Utilisation du thème Cayman pour GitHub Pages
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-remote-theme
+  - jekyll-paginate
 
-# Configuration des articles
-collections:
-  articles:
-    output: true
-    permalink: /articles/:name/  # Structure des URLs des articles
+# Configuration des posts
+paginate: 5
+paginate_path: "/blog/page:num/"
 
-# Paramètres de navigation
-header_pages:
-  - index.md
-  - about.md
+# SEO & Social
+author:
+  name: "YayaBed"
+  twitter: "@YayaBed"
+  facebook: "https://www.facebook.com/YayaBed"
 
-# Exemple de configuration de pagination (si tu as beaucoup d'articles)
-paginate: 5  # Nombre d'articles par page
-
-# SEO & social
-social:
-  twitter: "@YayaBed"  # Ton compte Twitter
-  facebook: "https://www.facebook.com/YayaBed"  # Ton Facebook, si tu en as un
-
-# Variables personnalisées
+# Valeurs par défaut pour tous les posts
 defaults:
   - scope:
       path: ""
@@ -37,11 +33,7 @@ defaults:
     values:
       layout: "post"
       author: "YayaBed"
-
-# Configurations supplémentaires pour les plugins (facultatif)
-plugins:
-  - jekyll-feed  # Permet la génération d'un flux RSS
-  - jekyll-seo-tag  # Améliore le SEO du site
+      comments: true
 
 # Options de sécurité et autres
 exclude:
@@ -49,3 +41,7 @@ exclude:
   - LICENSE
   - Gemfile
   - Gemfile.lock
+  - .jekyll-cache/
+  - .sass-cache/
+  - gemfiles/
+  - node_modules/
