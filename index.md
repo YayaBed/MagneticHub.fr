@@ -11,9 +11,10 @@ permalink: /
   </div>
 
   <div class="content-section">
-    <h2>Derniers Articles</h2>
+    <h2>Nos Articles</h2>
     <div class="article-list">
-      {% for article in site.articles %}
+      {% assign sorted_articles = site.articles | sort: "date" | reverse %}
+      {% for article in sorted_articles %}
         <div class="article-item">
           <h3><a href="{{ site.baseurl }}{{ article.url }}">{{ article.title }}</a></h3>
           {% if article.date %}
@@ -21,10 +22,25 @@ permalink: /
           {% endif %}
           {% if article.excerpt %}
             <p>{{ article.excerpt | strip_html | truncatewords: 30 }}</p>
-          {% else %}
-            <p>{{ article.content | strip_html | truncatewords: 30 }}</p>
           {% endif %}
           <a href="{{ site.baseurl }}{{ article.url }}" class="read-more">Lire la suite →</a>
+        </div>
+      {% else %}
+        <p>Aucun article trouvé dans la collection. Consultez le dossier /articles de votre dépôt.</p>
+        
+        <!-- Affichage du débogage -->
+        <div class="debug-info">
+          <p>Informations de débogage :</p>
+          <ul>
+            <li>Nombre d'articles dans site.articles : {{ site.articles.size }}</li>
+            <li>Collections disponibles : 
+              {% for collection in site.collections %}
+                {{ collection.label }}{% unless forloop.last %}, {% endunless %}
+              {% endfor %}
+            </li>
+            <li>Site URL: {{ site.url }}</li>
+            <li>Base URL: {{ site.baseurl }}</li>
+          </ul>
         </div>
       {% endfor %}
     </div>
@@ -34,5 +50,6 @@ permalink: /
     <h2>À propos</h2>
     <p>MagneticHub.fr est votre source de conseils pour maximiser vos revenus passifs en ligne à travers l'utilisation des microservices et autres stratégies efficaces.</p>
     <p>N'hésitez pas à explorer notre contenu et à partager vos commentaires !</p>
+    <p><a href="{{ site.baseurl }}/about/" class="read-more">En savoir plus sur nous →</a></p>
   </div>
 </div>
