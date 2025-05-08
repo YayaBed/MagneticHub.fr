@@ -1,7 +1,9 @@
-name: Update Index
+name: Update GitHub Pages Index
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'articles/*.md'
 
@@ -10,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cloner le dépôt
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Générer la liste des articles
+      - name: Generate index.md from articles
         run: |
           echo "---" > index.md
           echo "title: Bienvenue sur MagneticHub.fr" >> index.md
@@ -26,14 +28,14 @@ jobs:
           echo "" >> index.md
 
           for file in $(ls articles/*.md | sort); do
-            title=$(grep -m 1 '^#' "$file" | sed 's/^# //')
+            title=$(grep -m 1 '^# ' "$file" | sed 's/^# //')
             echo "- [$title]($file)" >> index.md
           done
 
-      - name: Commit et push du nouveau index.md
+      - name: Commit and push index.md
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.md
-          git commit -m "🔄 Mise à jour automatique de l’index"
+          git commit -m "🔄 Mise à jour automatique de l’index des articles" || echo "Aucune modification"
           git push
