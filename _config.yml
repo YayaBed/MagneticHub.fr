@@ -26,12 +26,6 @@ defaults:
       layout: "article"
       author: "YayaBed"
 
-# SEO & Social
-author:
-  name: "YayaBed"
-  twitter: "@YayaBed"
-  facebook: "https://www.facebook.com/YayaBed"
-
 # Valeurs par défaut pour tous les posts
 defaults:
   - scope:
