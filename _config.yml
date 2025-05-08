@@ -28,4 +28,5 @@ markdown: kramdown # Utilisation du moteur de rendu Markdown
 # Paramètres de cache
 future: true # Affiche les articles futurs
 show_drafts: true # Affiche les brouillons
-permalink: /:categories/:title/  # Définit la structure des URLs
+permalink: /articles/:title/
+
