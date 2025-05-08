@@ -1,32 +1,5 @@
-# _config.yml
-
 title: MagneticHub.fr
-description: Le blog dédié aux microservices et aux revenus passifs en ligne.
-baseurl: "" # Laisse vide pour GitHub Pages
-url: "https://yayabed.github.io/MagneticHub.fr" # L'URL de ton site
-
-# Permet de configurer la mise en forme des liens
-permalink: /:categories/:title/ # Exemple de permalien qui inclut la catégorie et le titre de l'article
-
-# Cacher certains fichiers dans le dépôt
-exclude:
-  - README.md
-  - Gemfile
-  - Gemfile.lock
-
-# Configuration des plugins
-plugins:
-  - jekyll-feed # Pour générer un flux RSS
-  - jekyll-seo-tag # Pour ajouter des balises SEO automatiquement
-
-# Configuration du thème (si tu utilises un thème Jekyll)
-theme: jekyll-theme-minimal
-
-# Configuration du Markdown
-markdown: kramdown # Utilisation du moteur de rendu Markdown
-
-# Paramètres de cache
-future: true # Affiche les articles futurs
-show_drafts: true # Affiche les brouillons
-permalink: /articles/:title/
-
+description: Bons plans puissants pour booster ta vie!
+baseurl: ""  # Ne pas mettre de valeur ici, pour GitHub Pages
+url: "https://yayabed.github.io"  # Ton URL GitHub Pages
+permalink: /articles/:title/  # Pour que chaque article ait une URL propre
