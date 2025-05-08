@@ -1,0 +1,40 @@
+name: Update Index with Article List
+
+on:
+  push:
+    paths:
+      - "articles/*.md"
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate index.md
+        run: |
+          echo "---" > index.md
+          echo "title: Bienvenue sur MagneticHub.fr" >> index.md
+          echo "layout: default" >> index.md
+          echo "---" >> index.md
+          echo "" >> index.md
+          echo "# Bienvenue sur MagneticHub.fr 👋" >> index.md
+          echo "" >> index.md
+          echo "Découvrez nos derniers articles publiés :" >> index.md
+          echo "" >> index.md
+
+          for file in $(ls articles/*.md | sort); do
+            filename=$(basename "$file")
+            title=$(head -n 1 "$file" | sed 's/^# //')
+            echo "- [$title]($file)" >> index.md
+          done
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add index.md
+          git commit -m "🔄 Mise à jour automatique de l’index.md"
+          git push
