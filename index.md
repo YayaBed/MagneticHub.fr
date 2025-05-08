@@ -1,14 +1,16 @@
 ---
-title: Bienvenue sur MagneticHub.fr
 layout: default
+title: Bienvenue sur MagneticHub.fr
 ---
 
 # Bienvenue !
 
-## Articles publiés
+Découvrez nos derniers articles :
 
-{% for file in site.pages %}
-  {% if file.path contains 'articles/' and file.extname == '.md' %}
-- [{{ file.title | default: file.name }}]({{ file.url }})
-  {% endif %}
-{% endfor %}
+<ul>
+  {% for article in site.pages %}
+    {% if article.url contains '/articles/' %}
+      <li><a href="{{ article.url }}">{{ article.title }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>
