@@ -13,14 +13,18 @@ permalink: /
   <div class="content-section">
     <h2>Derniers Articles</h2>
     <div class="article-list">
-      {% for post in site.posts %}
+      {% for article in site.articles %}
         <div class="article-item">
-          <h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
-          <span class="post-date">{{ post.date | date: "%d/%m/%Y" }}</span>
-          {% if post.excerpt %}
-            <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+          <h3><a href="{{ site.baseurl }}{{ article.url }}">{{ article.title }}</a></h3>
+          {% if article.date %}
+            <span class="post-date">{{ article.date | date: "%d/%m/%Y" }}</span>
           {% endif %}
-          <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Lire la suite →</a>
+          {% if article.excerpt %}
+            <p>{{ article.excerpt | strip_html | truncatewords: 30 }}</p>
+          {% else %}
+            <p>{{ article.content | strip_html | truncatewords: 30 }}</p>
+          {% endif %}
+          <a href="{{ site.baseurl }}{{ article.url }}" class="read-more">Lire la suite →</a>
         </div>
       {% endfor %}
     </div>
