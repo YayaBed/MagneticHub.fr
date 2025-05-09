@@ -1,3 +1,4 @@
+<meta name="google-site-verification" content="yqminNwrEKaG-t4Fu3julOdvp_VxHc-pEku5BlGpVO0" />
 ---
 layout: default
 title: "MagneticHub.fr"
