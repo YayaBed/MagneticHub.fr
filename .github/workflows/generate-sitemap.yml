@@ -1,4 +1,5 @@
-name: Générer sitemap.xml
+# .github/workflows/generate-sitemap.yml
+name: Generate Sitemap
 
 on:
   push:
@@ -7,36 +8,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Cloner le dépôt
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
       with:
-        persist-credentials: false # important pour pouvoir push avec un token personnalisé
-
-    - name: Configurer Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Installer les dépendances
-      run: pip install --upgrade pip
-
-    - name: Générer sitemap.xml
-      run: python .scripts/generate_sitemap.py
-
-    - name: Commit & push sitemap.xml
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        node-version: '18'
+    - name: Install dependencies
+      run: npm install sitemap
+    - name: Generate sitemap
+      run: node generate-sitemap.js
+    - name: Commit changes
       run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
         git add sitemap.xml
-
-        # Vérifie s'il y a des changements
-        if git diff --cached --quiet; then
-          echo "✅ Aucun changement à committer"
-        else
-          git commit -m "🗺️ MAJ automatique du sitemap"
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git HEAD:main
-        fi
+        git commit -m "Update sitemap"
+        git push
