@@ -1,34 +1,41 @@
 import os
-from urllib.parse import urljoin
+from datetime import datetime
+from urllib.parse import quote
 
 # Configuration
-base_url = "https://yayabed.github.io/MagneticHub.fr/"
-site_root = "https://yayabed.github.io/MagneticHub.fr/"  # Remplace par ton dossier local
+BASE_URL = "https://yayabed.github.io/MagneticHub.fr"  # Remplace par ton vrai domaine
+ARTICLES_DIR = "articles"             # Ton répertoire d'articles
+SITEMAP_PATH = "sitemap.xml"
 
-# Fichier de sortie
-sitemap_file = "sitemap.xml"
+def get_articles():
+    articles = []
+    for filename in os.listdir(ARTICLES_DIR):
+        if filename.endswith(".md") or filename.endswith(".markdown"):
+            slug = os.path.splitext(filename)[0]
+            url = f"{BASE_URL}/{quote(slug)}"
+            lastmod = datetime.utcnow().date().isoformat()
+            articles.append((url, lastmod))
+    return articles
 
-urls = []
+def generate_sitemap(articles):
+    sitemap = ['<?xml version="1.0" encoding="UTF-8"?>']
+    sitemap.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    for url, lastmod in articles:
+        sitemap.append("  <url>")
+        sitemap.append(f"    <loc>{url}</loc>")
+        sitemap.append(f"    <lastmod>{lastmod}</lastmod>")
+        sitemap.append("    <changefreq>weekly</changefreq>")
+        sitemap.append("    <priority>0.8</priority>")
+        sitemap.append("  </url>")
+    sitemap.append("</urlset>")
+    return "\n".join(sitemap)
 
-# Explorer tous les fichiers .html
-for root, _, files in os.walk(site_root):
-    for file in files:
-        if file.endswith(".html"):
-            filepath = os.path.join(root, file)
-            relative_path = os.path.relpath(filepath, site_root).replace("\\", "/")
-            url = urljoin(base_url, relative_path)
-            urls.append(url)
+def save_sitemap(content):
+    with open(SITEMAP_PATH, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"✅ Sitemap généré avec {len(content.splitlines())} lignes.")
 
-# Génération du fichier sitemap
-with open(sitemap_file, "w", encoding="utf-8") as f:
-    f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    f.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
-    for url in urls:
-        f.write("  <url>\n")
-        f.write(f"    <loc>{url}</loc>\n")
-        f.write("    <changefreq>monthly</changefreq>\n")
-        f.write("    <priority>0.8</priority>\n")
-        f.write("  </url>\n")
-    f.write("</urlset>\n")
-
-print(f"✅ Sitemap généré avec {len(urls)} pages dans {sitemap_file}")
+if __name__ == "__main__":
+    articles = get_articles()
+    sitemap_content = generate_sitemap(articles)
+    save_sitemap(sitemap_content)
