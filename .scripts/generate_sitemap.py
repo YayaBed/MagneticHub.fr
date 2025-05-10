@@ -3,7 +3,7 @@ from urllib.parse import urljoin
 
 # Configuration
 base_url = "https://yayabed.github.io/MagneticHub.fr/"
-site_root = "PATH_VERS_DOSSIER_LOCAL_DU_SITE"  # Remplace par ton dossier local
+site_root = "https://yayabed.github.io/MagneticHub.fr/"  # Remplace par ton dossier local
 
 # Fichier de sortie
 sitemap_file = "sitemap.xml"
