@@ -1,0 +1,27 @@
+name: Generate Sitemap
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate sitemap
+        uses: cicirello/generate-sitemap@v1
+        with:
+          base-url: 'https://votre-site.com'
+          output-path: './sitemap.xml'
+
+      - name: Commit sitemap
+        run: |
+          git config user.name 'GitHub Actions'
+          git config user.email 'actions@github.com'
+          git add sitemap.xml
+          git commit -m 'Mise à jour automatique du sitemap.xml'
+          git push
