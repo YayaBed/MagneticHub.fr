@@ -1,41 +1,41 @@
-import os
+import requests
+import xml.etree.ElementTree as ET
 from datetime import datetime
-from urllib.parse import quote
 
 # Configuration
-BASE_URL = "https://yayabed.github.io/MagneticHub.fr"  # Remplace par ton vrai domaine
-ARTICLES_DIR = "articles"             # Ton répertoire d'articles
-SITEMAP_PATH = "sitemap.xml"
+REPO_OWNER = "YayaBed"
+REPO_NAME = "MagneticHub.fr"
+BRANCH = "main"
+ARTICLES_DIR = "articles"
+BASE_URL = "https://yayabed.github.io/MagneticHub.fr"
+SITEMAP_FILE = "sitemap.xml"
 
-def get_articles():
-    articles = []
-    for filename in os.listdir(ARTICLES_DIR):
-        if filename.endswith(".md") or filename.endswith(".markdown"):
-            slug = os.path.splitext(filename)[0]
-            url = f"{BASE_URL}/{quote(slug)}"
-            lastmod = datetime.utcnow().date().isoformat()
-            articles.append((url, lastmod))
-    return articles
+def get_github_file_list():
+    api_url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{ARTICLES_DIR}?ref={BRANCH}"
+    response = requests.get(api_url)
+    if response.status_code != 200:
+        raise Exception(f"Erreur de récupération des fichiers depuis GitHub API: {response.status_code}")
+    return response.json()
 
-def generate_sitemap(articles):
-    sitemap = ['<?xml version="1.0" encoding="UTF-8"?>']
-    sitemap.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    for url, lastmod in articles:
-        sitemap.append("  <url>")
-        sitemap.append(f"    <loc>{url}</loc>")
-        sitemap.append(f"    <lastmod>{lastmod}</lastmod>")
-        sitemap.append("    <changefreq>weekly</changefreq>")
-        sitemap.append("    <priority>0.8</priority>")
-        sitemap.append("  </url>")
-    sitemap.append("</urlset>")
-    return "\n".join(sitemap)
+def generate_sitemap(entries):
+    urlset = ET.Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+    for entry in entries:
+        if entry["name"].endswith(".md"):
+            slug = entry["name"].replace(".md", "")
+            url = f"{BASE_URL}/{slug}.html"  # suppose que GitHub Pages rend les .md en .html
+            url_el = ET.SubElement(urlset, "url")
+            ET.SubElement(url_el, "loc").text = url
+            ET.SubElement(url_el, "lastmod").text = datetime.utcnow().date().isoformat()
+            ET.SubElement(url_el, "changefreq").text = "weekly"
+            ET.SubElement(url_el, "priority").text = "0.8"
+    return ET.tostring(urlset, encoding="utf-8", xml_declaration=True).decode("utf-8")
 
-def save_sitemap(content):
-    with open(SITEMAP_PATH, "w", encoding="utf-8") as f:
-        f.write(content)
-    print(f"✅ Sitemap généré avec {len(content.splitlines())} lignes.")
+def save_sitemap(xml_content):
+    with open(SITEMAP_FILE, "w", encoding="utf-8") as f:
+        f.write(xml_content)
+    print(f"✅ sitemap.xml mis à jour avec {xml_content.count('<url>')} URLs.")
 
 if __name__ == "__main__":
-    articles = get_articles()
-    sitemap_content = generate_sitemap(articles)
-    save_sitemap(sitemap_content)
+    files = get_github_file_list()
+    sitemap_xml = generate_sitemap(files)
+    save_sitemap(sitemap_xml)
